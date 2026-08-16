@@ -1,0 +1,56 @@
+.verdict-card {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.verdict-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.verdict-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.verdict-label {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.verdict-summary {
+  margin: 0.75rem 0 0;
+}
+
+.verdict-analyzed-url {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.verdict-analyzed-url code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.verdict-safe {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.verdict-suspicious {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.verdict-dangerous {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
