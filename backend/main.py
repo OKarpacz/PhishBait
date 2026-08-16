@@ -1,34 +1,42 @@
 from pathlib import Path
  
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+load_dotenv()
  
 from analyzer import analyze
+from live_checks import (
+    check_domain_age,
+    check_redirects,
+    check_safe_browsing,
+    check_security_headers,
+    check_ssl_certificate,
+)
 from schemas import AnalyzeRequest, AnalyzeResponse
 from url_features import extract_features
 
-app = FastAPI(
-    title="PhishBait",
-    description="A phishing detection API for websites and emails.",
-    version="0.0.1",
-)
+app = FastAPI(title="PhishBait", version="0.0.1", description="Phishing URL detection and analysis service")
 
-#Narazie tylko dla develeopmentu:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
+
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 def analyze_endpoint(request: AnalyzeRequest) -> AnalyzeResponse:
     return analyze(request)
 
+
 @app.get("/api/health")
-def health():
+def health() -> dict:
     return {"status": "healthy"}
+
 
 @app.get("/api/debug/url-features")
 def debug_url_features(url: str) -> dict:
@@ -52,6 +60,23 @@ def debug_url_features(url: str) -> dict:
         "typosquat_target": features.typosquat_target,
         "typosquat_similarity": features.typosquat_similarity,
         "subdomain_count": features.subdomain_count,
+    }
+
+
+@app.get("/api/debug/live-checks")
+def debug_live_checks(url: str) -> dict:
+    ssl_result = check_ssl_certificate(url)
+    safe_browsing_result = check_safe_browsing(url)
+    domain_age_result = check_domain_age(url)
+    redirects_result = check_redirects(url)
+    headers_result = check_security_headers(url)
+
+    return {
+        "ssl": ssl_result.__dict__,
+        "safe_browsing": safe_browsing_result.__dict__,
+        "domain_age": domain_age_result.__dict__,
+        "redirects": redirects_result.__dict__,
+        "security_headers": headers_result.__dict__,
     }
 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
