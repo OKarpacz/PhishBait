@@ -3,13 +3,16 @@
 }
 
 .signals-empty {
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
 .signals-title {
+  font-family: var(--font-display);
   font-size: 1rem;
+  font-weight: 600;
   margin: 0 0 0.75rem;
+  color: var(--text-primary);
 }
 
 .signals-list ul {
@@ -26,41 +29,46 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.75rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
+  background: rgba(19, 28, 46, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
 }
 
 .signal-text strong {
   display: block;
   font-size: 0.95rem;
+  color: var(--text-primary);
 }
 
 .signal-text p {
   margin: 0.15rem 0 0;
   font-size: 0.85rem;
-  color: #555;
+  color: var(--text-muted);
 }
 
 .signal-badge {
   flex-shrink: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   white-space: nowrap;
 }
 
 .severity-high {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgba(255, 59, 92, 0.15);
+  color: var(--accent-danger);
 }
 
 .severity-medium {
-  background: #fef3c7;
-  color: #92400e;
+  background: rgba(245, 165, 36, 0.15);
+  color: var(--accent-warning);
 }
 
 .severity-low {
-  background: #e0f2fe;
-  color: #075985;
+  background: rgba(34, 211, 238, 0.15);
+  color: var(--accent-cyan);
 }

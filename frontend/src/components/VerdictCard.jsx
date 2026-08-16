@@ -1,19 +1,11 @@
 import '../styles/components/VerdictCard.css'
 import ProbabilityBar from './ProbabilityBar'
 
+
 const VERDICT_CONFIG = {
-  safe: {
-    label: 'Safe',
-    className: 'verdict-safe',
-  },
-  suspicious: {
-    label: 'Suspicious',
-    className: 'verdict-suspicious',
-  },
-  dangerous: {
-    label: 'Dangerous',
-    className: 'verdict-dangerous',
-  },
+  safe: { label: 'Safe', className: 'verdict-safe' },
+  suspicious: { label: 'Suspicious', className: 'verdict-suspicious' },
+  dangerous: { label: 'Dangerous', className: 'verdict-dangerous' },
 }
 
 function VerdictCard({ result }) {
@@ -21,17 +13,15 @@ function VerdictCard({ result }) {
 
   return (
     <section className={`verdict-card ${config.className}`}>
-      <div className="verdict-header">
-        <span className="verdict-icon" aria-hidden="true">{config.icon}</span>
-        <h2 className="verdict-label">{config.label}</h2>
-      </div>
+      <div className="verdict-label-top">{config.label}</div>
+
+      <ProbabilityBar probability={result.phishing_probability} />
 
       <p className="verdict-summary">{result.summary}</p>
-      <ProbabilityBar probability={result.phishing_probability} />
 
       {result.analyzed_url && (
         <p className="verdict-analyzed-url">
-          Sprawdzony link: <code>{result.analyzed_url}</code>
+          Checked link: <code>{result.analyzed_url}</code>
         </p>
       )}
     </section>

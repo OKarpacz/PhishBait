@@ -23,10 +23,6 @@ app.add_middleware(
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 def analyze_endpoint(request: AnalyzeRequest) -> AnalyzeResponse:
-    """
-    US-44 / US-45: przyjmuje wklejony URL albo treść e-maila.
-    Zwraca werdykt w kształcie potrzebnym dla US-46, US-47, US-48, US-49.
-    """
     return analyze(request)
 
 @app.get("/api/health")
