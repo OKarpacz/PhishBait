@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import './styles/App.css'
-
 import VerdictCard from './components/VerdictCard'
 import SignalsList from './components/SignalsList'
+import ThreatMap from './components/ThreatMap'
+
 
 const MODES = {
   url: { label: 'Link (URL)', placeholder: 'https://example.com/login', rows: 3 },
-  email: { label: 'Email Content', placeholder: 'Paste the full content of the suspicious email (headers, links, body)...', rows: 8 },
+  email: { label: 'Email Content', placeholder: 'Paste the entire email content (headers, links, body)...', rows: 8 },
 }
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [result, setResult] = useState(null) 
+  const [result, setResult] = useState(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -22,7 +23,7 @@ function App() {
     setResult(null)
 
     if (!content.trim()) {
-      setError('Please paste a link or the content of a suspicious email.')
+      setError('Please paste a URL or email content first.')
       return
     }
 
@@ -50,57 +51,63 @@ function App() {
 
   function switchMode(nextMode) {
     setMode(nextMode)
-    setContent('')
     setResult(null)
     setError(null)
   }
 
   return (
-    <main className="app">
-      <h1>Check if it's Phishing</h1>
-      <p className="subtitle">Paste a link or the content of a suspicious email.</p>
+    <div className="page">
+      <ThreatMap />
 
-      <div className="tabs" role="tablist">
-        {Object.entries(MODES).map(([key, config]) => (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            aria-selected={mode === key}
-            className={`tab ${mode === key ? 'active' : ''}`}
-            onClick={() => switchMode(key)}
-          >
-            {config.label}
-          </button>
-        ))}
-      </div>
+      <main className="app">
+        <div className="eyebrow">Live threat monitoring</div>
+        <h1>Check if this is phishing</h1>
+        <p className="subtitle">Paste a link or the content of a suspicious email.</p>
 
-      <form onSubmit={handleSubmit}>
-        <textarea
-          className="input-field"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder={MODES[mode].placeholder}
-          rows={MODES[mode].rows}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Checking...' : 'Check'}
-        </button>
-      </form>
+        <div className="glass-card">
+          <div className="tabs" role="tablist">
+            {Object.entries(MODES).map(([key, config]) => (
+              <button
+                key={key}
+                type="button"
+                role="tab"
+                aria-selected={mode === key}
+                className={`tab ${mode === key ? 'active' : ''}`}
+                onClick={() => switchMode(key)}
+              >
+                {config.label}
+              </button>
+            ))}
+          </div>
 
-      {error && <p className="error">{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <textarea
+              className="input-field"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder={MODES[mode].placeholder}
+              rows={MODES[mode].rows}
+            />
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? 'Checking...' : 'Check'}
+            </button>
+          </form>
 
-      {result && <VerdictCard result={result} />}
+          {error && <p className="error">{error}</p>}
+        </div>
 
-      {result && <SignalsList signals={result.signals} />}
+        {result && <VerdictCard result={result} />}
 
-      {result && (
-        <details className="raw-details">
-          <summary>Raw API Response (debug)</summary>
-          <pre className="result-raw">{JSON.stringify(result, null, 2)}</pre>
-        </details>
-      )}
-    </main>
+        {result && <SignalsList signals={result.signals} />}
+
+        {result && (
+          <details className="raw-details">
+            <summary>Raw API Response (debug)</summary>
+            <pre className="result-raw">{JSON.stringify(result, null, 2)}</pre>
+          </details>
+        )}
+      </main>
+    </div>
   )
 }
 

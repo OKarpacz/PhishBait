@@ -1,9 +1,9 @@
 import '../styles/components/SignalsList.css'
 
 const SEVERITY_CONFIG = {
-  high: { label: 'High risk', className: 'severity-high' },
-  medium: { label: 'Medium risk', className: 'severity-medium' },
-  low: { label: 'Low risk', className: 'severity-low' },
+  high: { label: 'High Risk', className: 'severity-high' },
+  medium: { label: 'Medium Risk', className: 'severity-medium' },
+  low: { label: 'Low Risk', className: 'severity-low' },
 }
 
 function SignalsList({ signals }) {
@@ -17,7 +17,7 @@ function SignalsList({ signals }) {
 
   return (
     <div className="signals-list">
-      <h3 className="signals-title">Detected signals ({signals.length})</h3>
+      <h3 className="signals-title">Suspicious Signals ({signals.length})</h3>
       <ul>
         {signals.map((signal, index) => {
           const severity = SEVERITY_CONFIG[signal.severity]

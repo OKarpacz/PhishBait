@@ -11,7 +11,6 @@ URL_REGEX = re.compile(r"https?://[^\s]+")
 
 
 def _extract_url_from_email(text: str) -> str | None:
-    """na razie regex"""
     match = URL_REGEX.search(text)
     return match.group(0) if match else None
 
@@ -33,11 +32,6 @@ def _fake_signals_for(target: str) -> list[Signal]:
 
 
 def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
-    """
-    Punkt wejścia używany przez endpoint /api/analyze.
-    TODO(przyszły EPIC): podmienić ciało tej funkcji na prawdziwy pipeline
-    (parsowanie -> heurystyka + ML + live check -> agregacja).
-    """
     analyzed_url = None
     if request.input_type == InputType.email:
         analyzed_url = _extract_url_from_email(request.content)

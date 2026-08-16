@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field
 
 
 class InputType(str, Enum):
-    """Co użytkownik wkleił: sam URL, czy treść e-maila."""
     url = "url"
     email = "email"
 
@@ -13,19 +12,12 @@ class InputType(str, Enum):
 class AnalyzeRequest(BaseModel):
     """
     Body requestu POST /api/analyze.
-
-    input_type mówi backendowi, czy pole content to pojedynczy URL ,
-    czy pełna treść e-maila do analizy.
     """
     input_type: InputType
     content: str = Field(..., min_length=1, description="URL or email content to analyze")
 
 
 class RiskLevel(str, Enum):
-    """
-    Trzy poziomy werdyktu:
-    bezpieczna / podejrzana / niebezpieczna
-    """
     safe = "safe"
     suspicious = "suspicious"
     dangerous = "dangerous"
@@ -33,8 +25,7 @@ class RiskLevel(str, Enum):
 
 class Signal(BaseModel):
     """
-    np.:
-    { "name": "Brak certyfikatu SSL", "severity": "high" }
+    np. { "name": "No SSL Certificate", "severity": "high" }
     """
     name: str
     description: str
@@ -42,9 +33,6 @@ class Signal(BaseModel):
 
 
 class AnalyzeResponse(BaseModel):
-    """
-    Pełny werdykt zwracany do frontendu.
-    """
     verdict: RiskLevel                     
     phishing_probability: float = Field(   
         ..., ge=0, le=100, description="Probability of phishing in percentages (0-100)"
