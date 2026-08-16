@@ -1,0 +1,41 @@
+import '../styles/components/VerdictCard.css'
+import ProbabilityBar from './ProbabilityBar'
+
+const VERDICT_CONFIG = {
+  safe: {
+    label: 'Safe',
+    className: 'verdict-safe',
+  },
+  suspicious: {
+    label: 'Suspicious',
+    className: 'verdict-suspicious',
+  },
+  dangerous: {
+    label: 'Dangerous',
+    className: 'verdict-dangerous',
+  },
+}
+
+function VerdictCard({ result }) {
+  const config = VERDICT_CONFIG[result.verdict]
+
+  return (
+    <section className={`verdict-card ${config.className}`}>
+      <div className="verdict-header">
+        <span className="verdict-icon" aria-hidden="true">{config.icon}</span>
+        <h2 className="verdict-label">{config.label}</h2>
+      </div>
+
+      <p className="verdict-summary">{result.summary}</p>
+      <ProbabilityBar probability={result.phishing_probability} />
+
+      {result.analyzed_url && (
+        <p className="verdict-analyzed-url">
+          Sprawdzony link: <code>{result.analyzed_url}</code>
+        </p>
+      )}
+    </section>
+  )
+}
+
+export default VerdictCard

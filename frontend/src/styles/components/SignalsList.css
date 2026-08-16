@@ -1,0 +1,66 @@
+.signals-list {
+  margin-top: 1.5rem;
+}
+
+.signals-empty {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.signals-title {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.signals-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.signal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+}
+
+.signal-text strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.signal-text p {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.signal-badge {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.severity-high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.severity-medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.severity-low {
+  background: #e0f2fe;
+  color: #075985;
+}
