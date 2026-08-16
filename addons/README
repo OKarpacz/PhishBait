@@ -5,3 +5,5 @@ uvicorn main:app --reload --port 8000
 
 npm install --legacy-peer-deps
 npm run dev
+
+python -m pytest tests/test_url_features.py -v
