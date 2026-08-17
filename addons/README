@@ -8,3 +8,5 @@ npm run dev
 
 python -m pytest tests/test_url_features.py -v
 python -m pytest tests/test_heuristics.py -v
+
+download_dataset.py -> build_features.py -> augment_with_legit_domains.py -> augment_with_kaggle_paths.py ->train.py

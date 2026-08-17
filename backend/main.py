@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
+ 
 load_dotenv()
  
 from analyzer import analyze
@@ -15,29 +15,38 @@ from live_checks import (
     check_security_headers,
     check_ssl_certificate,
 )
+import ml_predictor
 from schemas import AnalyzeRequest, AnalyzeResponse
 from url_features import extract_features
-
-app = FastAPI(title="PhishBait", version="0.0.1", description="Phishing URL detection and analysis service")
-
+ 
+_model_loaded = ml_predictor.load_model()
+if _model_loaded:
+    print(f"[startup] ML model loaded: {ml_predictor.model_name()}")
+else:
+    print("[startup] No trained ML model found - running without it. "
+          "See ml/README.md to train one.")
+ 
+app = FastAPI(title="Phishing Detector - demo API", version="0.1.0")
+ 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
+ 
+ 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 def analyze_endpoint(request: AnalyzeRequest) -> AnalyzeResponse:
     return analyze(request)
-
-
+ 
+ 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "healthy"}
-
-
+    """Prosty endpoint do sprawdzenia, czy backend żyje."""
+    return {"status": "ok"}
+ 
+ 
 @app.get("/api/debug/url-features")
 def debug_url_features(url: str) -> dict:
     features = extract_features(url)
@@ -61,8 +70,8 @@ def debug_url_features(url: str) -> dict:
         "typosquat_similarity": features.typosquat_similarity,
         "subdomain_count": features.subdomain_count,
     }
-
-
+ 
+ 
 @app.get("/api/debug/live-checks")
 def debug_live_checks(url: str) -> dict:
     ssl_result = check_ssl_certificate(url)
@@ -70,7 +79,7 @@ def debug_live_checks(url: str) -> dict:
     domain_age_result = check_domain_age(url)
     redirects_result = check_redirects(url)
     headers_result = check_security_headers(url)
-
+ 
     return {
         "ssl": ssl_result.__dict__,
         "safe_browsing": safe_browsing_result.__dict__,
@@ -78,7 +87,9 @@ def debug_live_checks(url: str) -> dict:
         "redirects": redirects_result.__dict__,
         "security_headers": headers_result.__dict__,
     }
-
+ 
+ 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 if FRONTEND_DIST.exists():
     app.mount("/", StaticFiles(directory=FRONTEND_DIST, html=True), name="frontend")
+ 

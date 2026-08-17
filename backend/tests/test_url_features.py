@@ -94,3 +94,18 @@ def test_url_length_matches_input():
     url = "https://example.com/a/very/long/path?query=1"
     f = extract_features(url)
     assert f.url_length == len(url)
+
+
+def test_bare_domain_has_no_path():
+    f = extract_features("https://google.com")
+    assert f.has_path is False
+
+
+def test_trailing_slash_still_counts_as_no_path():
+    f = extract_features("https://google.com/")
+    assert f.has_path is False
+
+
+def test_url_with_path_is_detected():
+    f = extract_features("https://google.com/search?q=test")
+    assert f.has_path is True

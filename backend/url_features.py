@@ -27,7 +27,6 @@ _ALLOWED_URL_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01
 
 @dataclass
 class UrlFeatures:
-
     url: str
     scheme: str
     domain: str
@@ -43,17 +42,15 @@ class UrlFeatures:
     special_char_count: int
 
     has_ip_address: bool
-
     has_at_symbol: bool
-
     is_suspicious_tld: bool
-
     is_https: bool
 
     typosquat_target: str | None
     typosquat_similarity: float
 
     subdomain_count: int
+    has_path: bool
 
 
 def _count_special_chars(url: str) -> int:
@@ -125,4 +122,5 @@ def extract_features(url: str) -> UrlFeatures:
         typosquat_target=typosquat_target,
         typosquat_similarity=typosquat_similarity,
         subdomain_count=len(subdomain_parts),
+        has_path=parsed.path not in ("", "/"),
     )
